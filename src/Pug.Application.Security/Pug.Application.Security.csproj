@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+
+  <PropertyGroup>
+    <Description>Application security framework library</Description>
+    <AssemblyTitle>Pug.Application.Security</AssemblyTitle>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.1;</TargetFrameworks>
+    <LangVersion>9</LangVersion>
+    <AssemblyName>Pug.Application.Security</AssemblyName>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <Authors>Andrian</Authors>
+    <PackageLicenseExpression>Apache-2.0+</PackageLicenseExpression>
+    <License>Apache2.0</License>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/NDWX/PugFX.git</RepositoryUrl>
+    <PackageTags>Pug Security Session User Identity PugFX</PackageTags>
+    <Version>2.1.2</Version>
+    <AssemblyVersion>2.1.2</AssemblyVersion>
+    <FileVersion>2.1.2</FileVersion>
+    <PackageVersion>2.1.2</PackageVersion>
+    <PackageReleaseNotes>Fixed NullReferenceException bug when calling SecurityManager.CurrentUser and Upgraded Pug.Core. to v2.0.1</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="**\*.resx" />
+    <EmbeddedResource Include="compiler\resources\**\*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Implementations\IUserIdentityProvider.cs" />
+    <Compile Remove="Implementations\ThreadStaticSecurityManager.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pug.Application" Version="1.1.0" />
+    <PackageReference Include="Pug.Core" Version="2.0.1" />
+    <PackageReference Include="System.Security.Principal" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net46' ">
+    <DefineConstants>$(DefineConstants);NETFX</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+  </PropertyGroup>
+
+  <Target Name="PrecompileScript" BeforeTargets="BeforeBuild" Condition=" '$(IsCrossTargetingBuild)' != 'true' " />
+
+  <Target Name="PostcompileScript" AfterTargets="Build" Condition=" '$(IsCrossTargetingBuild)' != 'true' ">
+  </Target>
+
+</Project>
