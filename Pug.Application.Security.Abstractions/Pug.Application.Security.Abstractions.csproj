@@ -14,10 +14,10 @@
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/NDWX/Pug.Application.Security.git</RepositoryUrl>
         <PackageTags>Pug Application Security Abstractions</PackageTags>
-        <Version>2.1.2</Version>
-        <AssemblyVersion>2.1.2</AssemblyVersion>
-        <FileVersion>2.1.2</FileVersion>
-        <PackageVersion>2.1.2</PackageVersion>
+        <Version>3.0.0</Version>
+        <AssemblyVersion>3.0.0</AssemblyVersion>
+        <FileVersion>3.0.0</FileVersion>
+        <PackageVersion>2026.04.26.01</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>
