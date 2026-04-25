@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netcoreapp2.1</TargetFrameworks>
+        <LangVersion>9</LangVersion>
+        <AssemblyName>Pug.Application.Security.Abstractions</AssemblyName>
+        <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+        <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+        <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+        <Authors>Andrian</Authors>
+        <PackageLicenseExpression>Apache-2.0+</PackageLicenseExpression>
+        <License>Apache2.0</License>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/NDWX/Pug.Application.Security.git</RepositoryUrl>
+        <PackageTags>Pug Application Security Abstractions</PackageTags>
+        <Version>2.1.2</Version>
+        <AssemblyVersion>2.1.2</AssemblyVersion>
+        <FileVersion>2.1.2</FileVersion>
+        <PackageVersion>2.1.2</PackageVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Pug.Core" Version="2.0.1" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Pug.Application.Security.Models\Pug.Application.Security.Models.csproj" />
+    </ItemGroup>
+
+</Project>

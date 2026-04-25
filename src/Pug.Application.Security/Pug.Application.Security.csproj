@@ -14,8 +14,8 @@
     <License>Apache2.0</License>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/NDWX/PugFX.git</RepositoryUrl>
-    <PackageTags>Pug Security Session User Identity PugFX</PackageTags>
+    <RepositoryUrl>https://github.com/NDWX/Pug.Application.Security.git</RepositoryUrl>
+    <PackageTags>Pug Application Security</PackageTags>
     <Version>2.1.2</Version>
     <AssemblyVersion>2.1.2</AssemblyVersion>
     <FileVersion>2.1.2</FileVersion>
@@ -40,6 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Pug.Application.Security.Abstractions\Pug.Application.Security.Abstractions.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net46' ">
