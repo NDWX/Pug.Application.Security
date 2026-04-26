@@ -2,9 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pug.Application.Security", "src\Pug.Application.Security\Pug.Application.Security.csproj", "{F523ED56-72B6-4FAB-B6EF-D92D45248FC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pug.Application.Security.Abstractions", "Pug.Application.Security.Abstractions\Pug.Application.Security.Abstractions.csproj", "{2EF0F413-2079-4669-BC50-CFA6B253F378}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pug.Application.Security.Abstractions", "src\Pug.Application.Security.Abstractions\Pug.Application.Security.Abstractions.csproj", "{2EF0F413-2079-4669-BC50-CFA6B253F378}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pug.Application.Security.Models", "Pug.Application.Security.Models\Pug.Application.Security.Models.csproj", "{1FEADECA-BE90-495B-BC0F-958F19D979CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pug.Application.Security.Models", "src\Pug.Application.Security.Models\Pug.Application.Security.Models.csproj", "{1FEADECA-BE90-495B-BC0F-958F19D979CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

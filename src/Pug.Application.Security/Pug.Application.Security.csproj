@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Pug.Application.Security.Abstractions\Pug.Application.Security.Abstractions.csproj" />
+    <ProjectReference Include="..\Pug.Application.Security.Abstractions\Pug.Application.Security.Abstractions.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net46' ">
