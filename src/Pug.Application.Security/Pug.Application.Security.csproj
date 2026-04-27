@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Application security framework library</Description>
     <AssemblyTitle>Pug.Application.Security</AssemblyTitle>
-    <TargetFrameworks>netstandard2.0;netcoreapp2.1;</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.1;;netcoreapp3.0;net6.0;net8.0;net10.0</TargetFrameworks>
     <LangVersion>9</LangVersion>
     <AssemblyName>Pug.Application.Security</AssemblyName>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -20,7 +20,7 @@
     <AssemblyVersion>3.0.0.1</AssemblyVersion>
     <FileVersion>3.0.0.1</FileVersion>
     <PackageVersion>3.0.1</PackageVersion>
-    <PackageReleaseNotes>Separation of models and abstractions into individual projects</PackageReleaseNotes>
+    <PackageReleaseNotes>Added support for newer target frameworks and removal of unnecessary dependencies.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
