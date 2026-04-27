@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Application security framework library</Description>
     <AssemblyTitle>Pug.Application.Security</AssemblyTitle>
-    <TargetFrameworks>netstandard2.0;netcoreapp2.1;</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.1;;netcoreapp3.0;net6.0;net8.0;net10.0</TargetFrameworks>
     <LangVersion>9</LangVersion>
     <AssemblyName>Pug.Application.Security</AssemblyName>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -16,11 +16,11 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/NDWX/Pug.Application.Security.git</RepositoryUrl>
     <PackageTags>Pug Application Security</PackageTags>
-    <Version>3.0.0.0</Version>
-    <AssemblyVersion>3.0.0.0</AssemblyVersion>
-    <FileVersion>3.0.0.0</FileVersion>
-    <PackageVersion>3.0.0</PackageVersion>
-    <PackageReleaseNotes>Separation of models and abstractions into individual projects</PackageReleaseNotes>
+    <Version>3.0.0.1</Version>
+    <AssemblyVersion>3.0.0.1</AssemblyVersion>
+    <FileVersion>3.0.0.1</FileVersion>
+    <PackageVersion>3.0.1</PackageVersion>
+    <PackageReleaseNotes>Added support for newer target frameworks and removal of unnecessary dependencies.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,8 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pug.Application" Version="1.1.0" />
-    <PackageReference Include="Pug.Core" Version="2.0.1" />
     <PackageReference Include="System.Security.Principal" Version="4.0.1" />
   </ItemGroup>
 
