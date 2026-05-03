@@ -10,6 +10,8 @@ on:
 env:
   BuildConfiguration: debug
   CoreProject: src/Pug.Application.Security/Pug.Application.Security.csproj
+  DependencyInjectionProject: src/Pug.Application.Security.DependencyInjection/Pug.Application.Security.DependencyInjection.csproj
+  AspNetCorePrincipalIdentityAccessorsAccessorsProject: src/Pug.Application.Security.PrincipalIdentityAccessors.AspNetCore/Pug.Application.Security.PrincipalIdentityAccessors.AspNetCore.csproj
 
 jobs:
   build:
@@ -36,8 +38,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: Build Core project
-        run: dotnet build --nologo --configuration ${{env.BuildConfiguration}} ${{env.CoreProject}}
+      - name: Build DependencyInjection project
+        run: dotnet build --nologo --configuration ${{env.BuildConfiguration}} ${{env.DependencyInjectionProject}}
+
+      - name: Build AspNetCore principal identity accessors project
+        run: dotnet build --nologo --configuration ${{env.BuildConfiguration}} ${{env.AspNetCorePrincipalIdentityAccessorsAccessorsProject}}
 
       - name: End Sonar scan
         run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}

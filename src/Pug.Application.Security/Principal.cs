@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace Pug.Application.Security
 {
-	internal class User : IUser
+	internal class Principal : IPrincipal
 	{
 		private readonly IPrincipalRoleProvider _userRoleProvider;
 		private readonly IAuthorizationProvider _authorizationProvider;
 
-		public User(IPrincipalIdentity credentials, IPrincipalRoleProvider userRoleProvider,
+		public Principal(IPrincipalIdentity credentials, IPrincipalRoleProvider userRoleProvider,
 					IAuthorizationProvider authorizationProvider)
 		{
 			Identity = credentials;
@@ -26,7 +26,17 @@ namespace Pug.Application.Security
 		[Obsolete( "Use overload with NounQualifier for resource instead" )]
 		public bool IsAuthorized(IDictionary<string, string> context, string operation, DomainObject resource, string purpose = "")
 		{
-			return _authorizationProvider.UserIsAuthorized(context, this, operation, resource, purpose);
+			return IsAuthorized(
+				context,
+				operation,
+				new NounQualifier()
+				{
+					Domain = resource.Domain,
+					Type = resource.Object.Type,
+					Identifier = resource.Object.Identifier
+				},
+				purpose
+			);
 		}
 
 		public bool IsAuthorized( IDictionary<string, string> context, string operation, NounQualifier resource, string purpose = "" )
@@ -37,7 +47,17 @@ namespace Pug.Application.Security
 		[Obsolete( "Use overload with NounQualifier for resource instead" )]
 		public Task<bool> IsAuthorizedAsync( IDictionary<string, string> context, string operation, DomainObject resource, string purpose = "" )
 		{
-			return _authorizationProvider.UserIsAuthorizedAsync(context, this, operation, resource, purpose);
+			return IsAuthorizedAsync(
+				context,
+				operation,
+				new NounQualifier()
+				{
+					Domain = resource.Domain,
+					Type = resource.Object.Type,
+					Identifier = resource.Object.Identifier
+				},
+				purpose
+			);
 		}
 
 		public async Task<bool> IsAuthorizedAsync( IDictionary<string, string> context, string operation, NounQualifier resource, string purpose = "" )
@@ -80,7 +100,7 @@ namespace Pug.Application.Security
 			GC.SuppressFinalize( this );
 		}
 
-		~User()
+		~Principal()
 		{
 			Dispose( false );
 		}

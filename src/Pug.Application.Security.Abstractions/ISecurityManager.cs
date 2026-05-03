@@ -1,4 +1,7 @@
-﻿namespace Pug.Application.Security
+﻿using System;
+using System.Security.Principal;
+
+namespace Pug.Application.Security
 {
 	/// <summary>
 	/// General interface for a security manager.
@@ -10,6 +13,12 @@
 		/// <summary>
 		/// Get currently logged in user.
 		/// </summary>
+		[Obsolete( "Use Principal instead")]
 		IUser CurrentUser { get; }
+		
+		/// <summary>
+		/// Get currently logged in user.
+		/// </summary>
+		IPrincipal CurrentPrincipal { get; }
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Pug.Collections.Generic.Extensions;
 
 namespace Pug.Application.Security
@@ -24,14 +25,14 @@ namespace Pug.Application.Security
 
         public string Name { get; private set; }
 
-        public void Dispose()
+        protected virtual void Dispose( bool disposing )
         {
-            // not required
         }
 
-        public bool Equals(ICredentials other)
+        public void Dispose()
         {
-            return other != null && other.Identifier == Identifier;
+            Dispose( true );
+            GC.SuppressFinalize( this );
         }
     }
 }
