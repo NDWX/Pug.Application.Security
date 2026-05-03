@@ -11,6 +11,8 @@ env:
   ModelsProject: src/Pug.Application.Security.Models/Pug.Application.Security.Models.csproj
   AbstractionsProject: src/Pug.Application.Security.Abstractions/Pug.Application.Security.Abstractions.csproj
   CoreProject: src/Pug.Application.Security/Pug.Application.Security.csproj
+  DependencyInjectionProject: src/Pug.Application.Security.DependencyInjection/Pug.Application.Security.DependencyInjection.csproj
+  AspNetCorePrincipalIdentityAccessorsAccessorsProject: src/Pug.Application.Security.PrincipalIdentityAccessors.AspNetCore/Pug.Application.Security.PrincipalIdentityAccessors.AspNetCore.csproj
   PackagesBaseFolder: packages
 
 jobs:
@@ -28,8 +30,11 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - name: Build Core project
-        run: dotnet build --nologo --configuration ${{env.BuildConfiguration}} ${{env.CoreProject}}
+      - name: Build DependencyInjection project
+        run: dotnet build --nologo --configuration ${{env.BuildConfiguration}} ${{env.DependencyInjectionProject}}
+
+      - name: Build AspNetCorePrincipalIdentityAccessorsAccessors project
+        run: dotnet build --nologo --configuration ${{env.BuildConfiguration}} ${{env.AspNetCorePrincipalIdentityAccessorsAccessorsProject}}
 
       - name: Create packages base folder
         run: mkdir packages
@@ -56,6 +61,24 @@ jobs:
         run: dotnet pack --output ${{env.PackagesBaseFolder}} --nologo --configuration ${{env.BuildConfiguration}} ${{env.CoreProject}}
 
       - name: Publish Core NuGet package to NuGet.org
+        run: dotnet nuget push ${{env.PackagesBaseFolder}}/*.nupkg --api-key ${{secrets.NUGET_APIKEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: Clear packages folder
+        run: rm packages/*.nupkg
+
+      - name: Pack DependencyInjection project
+        run: dotnet pack --output ${{env.PackagesBaseFolder}} --nologo --configuration ${{env.BuildConfiguration}} ${{env.DependencyInjectionProject}}
+
+      - name: Publish DependencyInjection NuGet package to NuGet.org
+        run: dotnet nuget push ${{env.PackagesBaseFolder}}/*.nupkg --api-key ${{secrets.NUGET_APIKEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: Clear packages folder
+        run: rm packages/*.nupkg
+
+      - name: Pack AspNetCore principal identity accessors project
+        run: dotnet pack --output ${{env.PackagesBaseFolder}} --nologo --configuration ${{env.BuildConfiguration}} ${{env.AspNetCorePrincipalIdentityAccessorsAccessorsProject}}
+
+      - name: Publish AspNetCore principal identity accessors NuGet package to NuGet.org
         run: dotnet nuget push ${{env.PackagesBaseFolder}}/*.nupkg --api-key ${{secrets.NUGET_APIKEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
       - name: Clear packages folder

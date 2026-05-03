@@ -14,11 +14,11 @@
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/NDWX/Pug.Application.Security.git</RepositoryUrl>
         <PackageTags>Pug Application Security Abstractions</PackageTags>
-        <Version>3.0.0.0</Version>
-        <AssemblyVersion>3.0.0.0</AssemblyVersion>
-        <FileVersion>3.0.0.0</FileVersion>
-        <PackageVersion>3.0.1</PackageVersion>
-        <PackageReleaseNotes>Added support for newer target frameworks</PackageReleaseNotes>
+        <Version>3.1.0.0</Version>
+        <AssemblyVersion>3.1.0.0</AssemblyVersion>
+        <FileVersion>3.1.0.0</FileVersion>
+        <PackageVersion>3.1.0</PackageVersion>
+        <PackageReleaseNotes>Transitioning from concept of user (IUser, ISessionUserIdentityAccessor, IUSerRoleProvider) to principal (IPrincipal, IPrincipalIdentityAccessor, IPrincipalRoleProvider), and from DomainObject as hierarchical resource qualifier in AuthorizationCheck to NounQualifier.</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>

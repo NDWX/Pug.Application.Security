@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Pug.Application.Security
 {
+	[Obsolete( "Use IPrincipalRoleProvider instead")]
 	public interface IUserRoleProvider
 	{
 		bool UserIsInRole(string user, string role);

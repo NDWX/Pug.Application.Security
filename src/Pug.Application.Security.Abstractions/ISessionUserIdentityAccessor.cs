@@ -1,7 +1,11 @@
-﻿namespace Pug.Application.Security
+﻿using System;
+
+namespace Pug.Application.Security
 {
-    public interface ISessionUserIdentityAccessor
+    [Obsolete( "Use IPrincipalIdentityAccessor instead")]
+    public interface ISessionUserIdentityAccessor : IPrincipalIdentityAccessor
     {
         IPrincipalIdentity GetUserIdentity();
+        
     }
 }

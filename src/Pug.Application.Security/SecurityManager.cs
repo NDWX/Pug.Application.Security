@@ -3,36 +3,52 @@ using System.Threading;
 
 namespace Pug.Application.Security
 {
-	internal class SecurityContext
-	{
-		public IUser CurrentUser { get; set; }
-	}
-
-    public class SecurityManager : ISecurityManager
+	public class SecurityManager : ISecurityManager
 	{
 		private readonly string _application;
-		private readonly AsyncLocal<SecurityContext> asyncContext;
+		private readonly AsyncLocal<SecurityContext> _asyncContext;
 
-		public SecurityManager(string application, ISessionUserIdentityAccessor sessionUserIdentityAccessor, IUserRoleProvider userRoleProvider, IAuthorizationProvider uathorizationProvider)
+		public SecurityManager(
+			string application, IPrincipalIdentityAccessor sessionUserIdentityAccessor,
+			IPrincipalRoleProvider userRoleProvider, IAuthorizationProvider authorizationProvider
+		)
 		{
 			_application = application ?? throw new ArgumentNullException( nameof(application) );
-			SessionUserIdentityAccessor = sessionUserIdentityAccessor ?? throw new ArgumentNullException( nameof(sessionUserIdentityAccessor) );
-			UserRoleProvider = userRoleProvider;
-			AuthorizationProvider = uathorizationProvider;
+			PrincipalIdentityAccessor = sessionUserIdentityAccessor ??
+										throw new ArgumentNullException( nameof(sessionUserIdentityAccessor) );
 
-			asyncContext = new AsyncLocal<SecurityContext>()
+			PrincipalRoleProvider = userRoleProvider;
+			AuthorizationProvider = authorizationProvider;
+
+			_asyncContext = new AsyncLocal<SecurityContext>()
 			{
 				Value = new SecurityContext()
 			};
+		}
+
+		[Obsolete(
+			"Use SecurityManager(string, IPrincipalIdentityAccessor, IPrincipalRoleProvider, IAuthorizationProvider) instead"
+		)]
+		public SecurityManager(
+			string application, ISessionUserIdentityAccessor sessionUserIdentityAccessor,
+			IUserRoleProvider userRoleProvider, IAuthorizationProvider authorizationProvider
+		) : this(
+			application,
+			(IPrincipalIdentityAccessor)sessionUserIdentityAccessor,
+			new UserRoleProviderAdapter( userRoleProvider ),
+			authorizationProvider
+		)
+		{
+			UserRoleProvider = userRoleProvider;
 		}
 
 		internal SecurityContext SecurityContext
 		{
 			get
 			{
-				SecurityContext securityContext = asyncContext.Value;
+				SecurityContext securityContext = _asyncContext.Value;
 
-				if ( securityContext is not null )
+				if( securityContext is not null )
 					return securityContext;
 
 				securityContext = new SecurityContext();
@@ -41,12 +57,10 @@ namespace Pug.Application.Security
 
 				return securityContext;
 			}
-			private set
-			{
-				asyncContext.Value = value;
-			}
+			private set { _asyncContext.Value = value; }
 		}
 
+		[Obsolete( "Use CurrentPrincipal instead" )]
 		public IUser CurrentUser
 		{
 			get
@@ -54,27 +68,54 @@ namespace Pug.Application.Security
 				SecurityContext securityContext = SecurityContext;
 
 				IUser user = SecurityContext.CurrentUser;
-				
+
 				if( user is not null )
 					return user;
-				
-				IPrincipalIdentity userIdentity = SessionUserIdentityAccessor.GetUserIdentity();
+
+				IPrincipalIdentity userIdentity = PrincipalIdentityAccessor.GetPrincipalIdentity();
 
 				if( userIdentity is null )
 					return null;
 
-				user = new User( userIdentity, UserRoleProvider, AuthorizationProvider );
+				user = new User( userIdentity, PrincipalRoleProvider, AuthorizationProvider );
 
 				securityContext.CurrentUser = user;
-				
+
 				return user;
 			}
 		}
 
-		protected ISessionUserIdentityAccessor SessionUserIdentityAccessor { get; }
+		public IPrincipal CurrentPrincipal
+		{
+			get
+			{
+				SecurityContext securityContext = SecurityContext;
 
-		public  IUserRoleProvider UserRoleProvider { get;  }
+				IPrincipal principal = SecurityContext.CurrentPrincipal;
 
-        public IAuthorizationProvider AuthorizationProvider { get; }
+				if( principal is not null )
+					return principal;
+
+				IPrincipalIdentity userIdentity = PrincipalIdentityAccessor.GetPrincipalIdentity();
+
+				if( userIdentity is null )
+					return null;
+
+				principal = new Principal( userIdentity, PrincipalRoleProvider, AuthorizationProvider );
+
+				securityContext.CurrentPrincipal = principal;
+
+				return principal;
+			}
+		}
+
+		protected IPrincipalIdentityAccessor PrincipalIdentityAccessor { get; }
+
+		public IPrincipalRoleProvider PrincipalRoleProvider { get; }
+
+		[Obsolete( "Use PrincipalRoleProvider instead" )]
+		public IUserRoleProvider UserRoleProvider { get; }
+
+		public IAuthorizationProvider AuthorizationProvider { get; }
 	}
 }
