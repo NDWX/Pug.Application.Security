@@ -16,7 +16,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Pug.Application.Security.Abstractions\Pug.Application.Security.Abstractions.csproj" />
+        <ProjectReference Include="../Pug.Application.Security.Abstractions/Pug.Application.Security.Abstractions.csproj" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">

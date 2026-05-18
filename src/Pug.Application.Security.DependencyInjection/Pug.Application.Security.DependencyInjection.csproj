@@ -16,7 +16,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Pug.Application.Security\Pug.Application.Security.csproj" />
+      <ProjectReference Include="../Pug.Application.Security/Pug.Application.Security.csproj" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">

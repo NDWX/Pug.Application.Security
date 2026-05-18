@@ -24,13 +24,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="**\*.resx" />
-    <EmbeddedResource Include="compiler\resources\**\*" />
+    <EmbeddedResource Include="**/*.resx" />
+    <EmbeddedResource Include="compiler/resources/**/*" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Implementations\IUserIdentityProvider.cs" />
-    <Compile Remove="Implementations\ThreadStaticSecurityManager.cs" />
+    <Compile Remove="Implementations/IUserIdentityProvider.cs" />
+    <Compile Remove="Implementations/ThreadStaticSecurityManager.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Pug.Application.Security.Abstractions\Pug.Application.Security.Abstractions.csproj" />
+    <ProjectReference Include="../Pug.Application.Security.Abstractions/Pug.Application.Security.Abstractions.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net46' ">

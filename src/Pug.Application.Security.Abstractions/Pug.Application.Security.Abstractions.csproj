@@ -26,7 +26,7 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\Pug.Application.Security.Models\Pug.Application.Security.Models.csproj" />
+      <ProjectReference Include="../Pug.Application.Security.Models/Pug.Application.Security.Models.csproj" />
     </ItemGroup>
 
 </Project>
