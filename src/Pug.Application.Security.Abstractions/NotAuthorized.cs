@@ -2,6 +2,7 @@
 
 namespace Pug.Application.Security
 {
+	[Obsolete( "Will be removed in future versions." )]
 	public class NotAuthorized : Exception
 	{
 		public NotAuthorized()
