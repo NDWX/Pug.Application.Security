@@ -1,5 +1,13 @@
 # Pug.Application.Security
 
+![develop - build](https://github.com/NDWX/Pug.Application.Security/workflows/build%20and%20analyze/badge.svg?branch=develop) ![main - build and NuGet publish](https://github.com/NDWX/Pug.Application.Security/workflows/publish%20nuget%20package/badge.svg?branch=main)
+
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=NDWX_Authorized&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=NDWX_Authorized) [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=NDWX_Authorized&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=NDWX_Authorized) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=NDWX_Authorized&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=NDWX_Authorized)
+
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=NDWX_Authorized&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=NDWX_Authorized) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=NDWX_Authorized&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=NDWX_Authorized) [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=NDWX_Authorized&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=NDWX_Authorized)
+
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=NDWX_Authorized&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=NDWX_Authorized)  [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=NDWX_Authorized&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=NDWX_Authorized) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=NDWX_Authorized&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=NDWX_Authorized) 
+
 An application-level security abstraction for .NET that decouples business logic from authentication and authorization infrastructure. It provides a principal-centric model where identity retrieval, role checking, and authorization decisions are each defined as pluggable interfaces, unified under a single `ISecurityManager` facade that is async-context-safe.
 
 ---
