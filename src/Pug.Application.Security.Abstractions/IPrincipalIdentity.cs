@@ -10,6 +10,11 @@ namespace Pug.Application.Security
 			get;
 		}
 
+		string Type
+		{
+			get;
+		}
+
 		IDictionary<string, string> Attributes
 		{
 			get;

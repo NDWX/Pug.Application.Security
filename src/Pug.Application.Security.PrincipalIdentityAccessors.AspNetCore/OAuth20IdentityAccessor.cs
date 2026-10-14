@@ -25,7 +25,7 @@ namespace Pug.Application.Security.PrincipalIdentityAccessors.AspNetCore
 
 		public OAuth20IdentityAccessor(IHttpContextAccessor httpContextAccessor)
 		{
-			this._httpContextAccessor = httpContextAccessor;
+			_httpContextAccessor = httpContextAccessor;
 		}
 
 		public IPrincipalIdentity GetUserIdentity() => GetPrincipalIdentity();
@@ -36,17 +36,15 @@ namespace Pug.Application.Security.PrincipalIdentityAccessors.AspNetCore
 
 			if (httpContext == null)
 				return null;
-			
+
 			ClaimsPrincipal principal = httpContext.User;
 
 			if (principal == null)
 				return null;
 
-			string client, subject, authenticationType;
-
-			client = principal.Claims.Where(c => c.Type.ToUpper() == "CLIENT_ID")?.FirstOrDefault()?.Value;
-			subject = principal.Claims.Where(c => c.Type.ToUpper() == "SUB")?.FirstOrDefault()?.Value;
-			authenticationType = principal.Claims.Where(c => c.Type.ToUpper() == "AMR")?.FirstOrDefault()?.Value;
+			string client = principal.Claims.Where(c => c.Type.ToUpper() == "CLIENT_ID")?.FirstOrDefault()?.Value;
+			string subject = principal.Claims.Where(c => c.Type.ToUpper() == "SUB")?.FirstOrDefault()?.Value;
+			string authenticationType = principal.Claims.Where(c => c.Type.ToUpper() == "AMR")?.FirstOrDefault()?.Value;
 
 			Dictionary<string, string> attributes = new Dictionary<string, string>();
 
@@ -67,7 +65,20 @@ namespace Pug.Application.Security.PrincipalIdentityAccessors.AspNetCore
 
 			attributes.Add(IdentityAttributeNames.ClientIdentifier, client);
 
-			return new BasicPrincipalIdentity(subject, subject, principal.Identity.IsAuthenticated, authenticationType, attributes);
+			string principalType = OAuth2PrincipalTypes.User;
+
+			if (!string.IsNullOrWhiteSpace(client) && (string.IsNullOrWhiteSpace(subject) || subject == client))
+			{
+				principalType = OAuth2PrincipalTypes.Application;
+				subject = client;
+			}
+
+			return new BasicPrincipalIdentity(
+				principalType,
+				subject , subject,
+				principal.Identity.IsAuthenticated, authenticationType,
+				attributes
+			);
 		}
 	}
 }

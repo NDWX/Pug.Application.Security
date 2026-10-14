@@ -6,8 +6,9 @@ namespace Pug.Application.Security
 {
     public class BasicPrincipalIdentity : IPrincipalIdentity
     {
-        public BasicPrincipalIdentity(string identifier, string name, bool isAuthenticated, string authenticationType, IDictionary<string, string> attributes)
+        public BasicPrincipalIdentity(string type, string identifier, string name, bool isAuthenticated, string authenticationType, IDictionary<string, string> attributes)
         {
+            Type = type;
             Identifier = identifier;
             Name = name;
             AuthenticationType = authenticationType;
@@ -15,9 +16,11 @@ namespace Pug.Application.Security
             Attributes = attributes.ReadOnly();
         }
 
-        public IDictionary<string, string> Attributes { get; private set; }
+        public string Type { get; private set; }
 
         public string Identifier { get; private set; }
+
+        public IDictionary<string, string> Attributes { get; private set; }
 
         public string AuthenticationType { get; private set; }
 
