@@ -18,8 +18,14 @@ namespace Pug.Application.Security
 			_authorizationProvider = authorizationProvider;
 		}
 
+		// An anonymous identity has no identifier to resolve roles for, so it is never passed to the role provider
+		private bool HasIdentifier => Identity.IsAuthenticated && !string.IsNullOrWhiteSpace( Identity.Identifier );
+
 		public bool IsInRole(string role)
 		{
+			if( !HasIdentifier )
+				return false;
+
 			return _userRoleProvider.PrincipalIsInRole(Identity.Identifier, role);
 		}
 
@@ -67,11 +73,17 @@ namespace Pug.Application.Security
 
 		public IEnumerable<string> GetRoles()
 		{
+			if( !HasIdentifier )
+				return Array.Empty<string>();
+
 			return _userRoleProvider.GetPrincipalRoles(Identity.Identifier);
 		}
 
 		public Task<IEnumerable<string>> GetRolesAsync( )
 		{
+			if( !HasIdentifier )
+				return Task.FromResult<IEnumerable<string>>( Array.Empty<string>() );
+
 			return _userRoleProvider.GetPrincipalRolesAsync(Identity.Identifier);
 		}
 

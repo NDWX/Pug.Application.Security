@@ -12,5 +12,8 @@
 		public static readonly string IdentityServerScope = "identityserver-scope";
 		public static readonly string IdentityServerClientIdentifier = "identityserver-client-identifier";
 		public static readonly string AuthenticationType = "authentication-type";
+		public static readonly string TokenTenant = "token-tenant";
+		public static readonly string TokenObjectIdentifier = "token-object-identifier";
+		public static readonly string TokenAuthorizedParty = "token-authorized-party";
 	}
 }
