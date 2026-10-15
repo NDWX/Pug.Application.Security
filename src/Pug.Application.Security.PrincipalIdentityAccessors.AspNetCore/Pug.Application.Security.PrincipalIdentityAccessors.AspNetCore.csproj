@@ -9,10 +9,8 @@
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/NDWX/Pug.Application.Security.git</RepositoryUrl>
         <PackageTags>Pug Application Security Web User Identity Accessors</PackageTags>
-        <Version>3.1.0.0</Version>
-        <AssemblyVersion>3.1.0.0</AssemblyVersion>
-        <FileVersion>3.1.0.0</FileVersion>
-        <PackageVersion>3.1.0</PackageVersion>
+        <Version>3.2.0.0</Version>
+        <PackageReleaseNotes>Set principal IsAuthenticated flag to false anonymous user and added support for EntraID claim types, and upgraded Pug.Application.Security.Abstractions to v3.1.1</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
