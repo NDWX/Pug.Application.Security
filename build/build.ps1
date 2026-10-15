@@ -635,7 +635,8 @@ switch( $Stage )
 
 			if( $package.validationBaseline )
 			{
-				$arguments += "-p:PackageValidationBaselineVersion=$( $package.validationBaseline )"
+				# for this project only (Directory.Build.props), not for the projects it references
+				$arguments += @( "-p:ValidationBaselineProject=$( $package.name )", "-p:ValidationBaselineVersion=$( $package.validationBaseline )" )
 			}
 
 			Invoke-Native -FilePath 'dotnet' -Arguments $arguments

@@ -1,10 +1,17 @@
 <Project>
 
 	<!-- Every packable project is checked for API compatibility across its target frameworks when packed.
-	     build/build.ps1 adds -p:PackageValidationBaselineVersion=<last release> when the major version is
-	     unchanged, so a breaking change without a major bump fails the pack. -->
+	     build/build.ps1 names the project it packs and its last release (ValidationBaselineProject and
+	     ValidationBaselineVersion) when the major version is unchanged, so a breaking change without a
+	     major bump fails the pack. PackageValidationBaselineVersion is set here, for that project only:
+	     passed on the command line it would reach every referenced project too, each then validating
+	     against a release of its own at that version. -->
 	<PropertyGroup>
 		<EnablePackageValidation>true</EnablePackageValidation>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(ValidationBaselineVersion)' != '' and '$(ValidationBaselineProject)' == '$(MSBuildProjectName)' ">
+		<PackageValidationBaselineVersion>$(ValidationBaselineVersion)</PackageValidationBaselineVersion>
 	</PropertyGroup>
 
 </Project>
