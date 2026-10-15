@@ -1,0 +1,12 @@
+<Project>
+
+	<!-- Preview packages (build/build.ps1 -Stage pack -PreviewSuffix preview.<run>). Only the projects
+	     named in PlannedProjects ("|Name|Name|") take the suffix, so a planned package depends on the
+	     preview of a planned reference but on the released version of an unchanged one. Set here rather
+	     than in Directory.Build.props because each project declares its own PackageVersion. -->
+	<PropertyGroup Condition=" '$(PreviewSuffix)' != '' and $(PlannedProjects.Contains('|$(MSBuildProjectName)|')) ">
+		<PackageVersion Condition=" '$(PackageVersion)' == '' ">$(Version)</PackageVersion>
+		<PackageVersion>$(PackageVersion)-$(PreviewSuffix)</PackageVersion>
+	</PropertyGroup>
+
+</Project>

@@ -1,0 +1,10 @@
+<Project>
+
+	<!-- Every packable project is checked for API compatibility across its target frameworks when packed.
+	     build/build.ps1 adds -p:PackageValidationBaselineVersion=<last release> when the major version is
+	     unchanged, so a breaking change without a major bump fails the pack. -->
+	<PropertyGroup>
+		<EnablePackageValidation>true</EnablePackageValidation>
+	</PropertyGroup>
+
+</Project>

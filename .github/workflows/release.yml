@@ -1,0 +1,130 @@
+name: Release
+
+# Runs when CI completes on main or a support/** branch, and publishes the 'packages' artifact of that
+# CI run: the packages built and tested from the commit being released, as planned there. Nothing is
+# rebuilt. A CI run that did not succeed releases nothing, and no older run is ever used instead.
+#
+# A version in a project file is the request to release it (build/build.ps1): the plan holds every
+# package whose version is not on nuget.org yet, and a commit whose plan holds none releases nothing.
+#
+# workflow_run only fires for this file as it is on the default branch.
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main, 'support/**']
+
+permissions:
+  contents: read
+
+# One release at a time per branch. A run still waiting for approval when a newer commit's run arrives
+# is caught by the branch tip check in the nuget job: only the newest commit is released.
+concurrency:
+  group: release-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: false
+
+jobs:
+  # What the CI run planned, shown on this run's page before anyone approves the nuget job.
+  plan:
+    # a pushed commit of this repository; never a run started from a fork
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    outputs:
+      release: ${{ steps.plan.outputs.release }}
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: packages
+          path: artifacts
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - name: Show the plan
+        id: plan
+        shell: pwsh
+        env:
+          COMMIT: ${{ github.event.workflow_run.head_sha }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          CI_RUN: ${{ github.event.workflow_run.html_url }}
+        run: |
+          $packed = Get-Content -Raw artifacts/packages.json | ConvertFrom-Json
+
+          if( $packed.commit -ne $env:COMMIT )
+          {
+            throw "the artifact was packed from $( $packed.commit ), not from $env:COMMIT"
+          }
+
+          $packages = @( $packed.packages )
+          $summary = @( '### Release', '', "``$env:BRANCH`` at ``$env:COMMIT``, packed by [CI]($env:CI_RUN)", '' )
+          $summary += $packages ? @( $packages | ForEach-Object { "- $( $_.id ) $( $_.version )" } ) : @( 'Nothing to release: every version is already on nuget.org.' )
+          Add-Content -LiteralPath $env:GITHUB_STEP_SUMMARY -Value ( $summary -join "`n" )
+          Add-Content -LiteralPath $env:GITHUB_OUTPUT -Value "release=$( ( $packages.Count -gt 0 ).ToString().ToLowerInvariant() )"
+
+  # Pushing to nuget.org cannot be undone (a version can only be unlisted), so it runs in the
+  # 'release' environment, where required reviewers gate it. The branch tip check refuses a commit
+  # that is no longer the tip of its branch, as when approval came after a newer push.
+  # Trusted publishing: no stored API key. NuGet/login trades this job's OIDC token for a key that
+  # lives an hour, which nuget.org issues only if a trusted publishing policy matches this
+  # repository, this workflow file and the 'release' environment.
+  nuget:
+    needs: plan
+    if: needs.plan.outputs.release == 'true'
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: ./.github/actions/setup
+      - uses: actions/download-artifact@v8
+        with:
+          name: packages
+          path: artifacts
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - name: Log in to nuget.org
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER }}
+      - name: Push to nuget.org
+        shell: pwsh
+        env:
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+        run: ./build/build.ps1 -Stage push -Branch $env:BRANCH
+
+  # A <PackageId>-v<X.Y.Z> tag on the released commit and a draft GitHub release for each package. The
+  # tags are the baselines of the next plan, so this runs without the branch tip check: once the
+  # packages are on nuget.org, their tags must follow. The drafts stay drafts: the maintainer reads
+  # them and publishes them by hand.
+  github-release:
+    needs: nuget
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: actions/download-artifact@v8
+        with:
+          name: packages
+          path: artifacts
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - name: Tag and draft releases
+        shell: pwsh
+        run: ./build/build.ps1 -Stage release

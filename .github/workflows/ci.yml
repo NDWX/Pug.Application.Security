@@ -1,0 +1,86 @@
+name: CI
+
+# Every branch push builds, tests, plans the release and packs what the plan releases. The packages,
+# plan.json and packages.json are kept as the 'packages' artifact of the run: the release workflow
+# publishes exactly that artifact, from the CI run of the commit it releases, never a rebuild.
+#
+# The plan fails the run when a package changed since its last release but its version was not bumped
+# (build/build.ps1), so a missed bump shows up on the branch, before it reaches main.
+#
+# On develop, the planned packages are also pushed to GitHub Packages as <version>-preview.<run>, for
+# trying a change in a consuming repo before it is released.
+on:
+  push:
+    branches: ['**']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  # a newer push to the same branch supersedes a running check
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      release: ${{ steps.plan.outputs.release }}
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # the plan compares each project with its last release tag
+          fetch-depth: 0
+      - uses: ./.github/actions/setup
+
+      # SonarCloud analyses the build in between begin and end; skipped where the secret is not set
+      - name: Begin SonarCloud analysis
+        if: env.SONAR_TOKEN != ''
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
+          dotnet sonarscanner begin /o:ndwx /k:NDWX_Pug.Application.Security /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url=https://sonarcloud.io
+      - name: Test
+        run: pwsh build/build.ps1 -Stage test
+      - name: End SonarCloud analysis
+        if: env.SONAR_TOKEN != ''
+        run: dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
+
+      - name: Plan
+        id: plan
+        run: pwsh build/build.ps1 -Stage plan
+      - name: Pack and checksum
+        shell: pwsh
+        run: |
+          ./build/build.ps1 -Stage pack
+          ./build/build.ps1 -Stage checksums
+      - uses: actions/upload-artifact@v7
+        with:
+          name: packages
+          path: artifacts
+          if-no-files-found: error
+
+  # Previews of the planned packages, each depending on the previews of the planned packages it
+  # references. GitHub Packages takes the run's own token; the packages land under the repository owner.
+  preview:
+    if: github.ref == 'refs/heads/develop' && needs.build.outputs.release == 'true'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - uses: actions/download-artifact@v8
+        with:
+          name: packages
+          path: artifacts
+      - name: Pack and push previews
+        shell: pwsh
+        env:
+          NUGET_API_KEY: ${{ github.token }}
+        run: |
+          ./build/build.ps1 -Stage pack -PreviewSuffix 'preview.${{ github.run_number }}'
+          ./build/build.ps1 -Stage push -Source 'https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json'

@@ -1,6 +1,6 @@
 # Pug.Application.Security
 
-![develop - build](https://github.com/NDWX/Pug.Application.Security/workflows/build%20and%20analyze/badge.svg?branch=develop) ![main - build and NuGet publish](https://github.com/NDWX/Pug.Application.Security/workflows/publish%20nuget%20package/badge.svg?branch=main)
+![develop - CI](https://github.com/NDWX/Pug.Application.Security/actions/workflows/ci.yml/badge.svg?branch=develop) ![main - CI](https://github.com/NDWX/Pug.Application.Security/actions/workflows/ci.yml/badge.svg?branch=main) ![Release](https://github.com/NDWX/Pug.Application.Security/actions/workflows/release.yml/badge.svg)
 
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=NDWX_Authorized&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=NDWX_Authorized) [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=NDWX_Authorized&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=NDWX_Authorized) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=NDWX_Authorized&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=NDWX_Authorized)
 
